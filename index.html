@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flux Generator Kyys Apeka</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ================= BASE ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Orbitron", sans-serif;
+}
+
+:root{
+    --ungu-soft-1:#2a0935;
+    --ungu-soft-2:#3a0f4b;
+    --ungu-border:#a56adb;
+    --ungu-terang:#e7c5ff;  /* font + button */
+    --ungu-terang-2:#d89aff;
+}
+
+/* ================= BODY ================= */
+body{
+    background:linear-gradient(160deg, var(--ungu-soft-1), var(--ungu-soft-2));
+    color:var(--ungu-terang);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:35px 20px;
+    overflow-x:hidden;
+}
+
+/* ================= MENU BUTTON ================= */
+.menu-btn{
+    position:fixed;
+    top:25px;
+    right:25px;
+    width:42px;
+    height:42px;
+    background:rgba(231,197,255,0.08);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(231,197,255,0.45);
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:0.35s ease;
+    z-index:9999;
+}
+
+.menu-btn:hover{
+    background:rgba(231,197,255,0.18);
+}
+
+.menu-btn span{
+    position:absolute;
+    width:18px;
+    height:3px;
+    background:var(--ungu-terang); /* UNGU CERAH */
+    border-radius:4px;
+    transition:0.35s ease;
+}
+
+.menu-btn span:nth-child(1){
+    transform:translateY(-6px);
+}
+.menu-btn span:nth-child(2){
+    transform:translateY(6px);
+}
+
+.menu-btn.active span:nth-child(1){
+    transform:rotate(45deg);
+}
+.menu-btn.active span:nth-child(2){
+    transform:rotate(-45deg);
+}
+
+/* ================= POPUP ================= */
+.popup{
+    position:fixed;
+    top:80px;
+    right:25px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(18px);
+    padding:14px 22px;
+    border-radius:14px;
+    border:1px solid rgba(231,197,255,0.55);
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-12px);
+    transition:0.35s ease;
+    box-shadow:0 0 22px rgba(231,197,255,0.22);
+    z-index:9998;
+}
+
+.popup.show{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
+}
+
+.popup a{
+    color:var(--ungu-terang); /* FONT UNGU TERANG */
+    text-decoration:none;
+    font-size:0.9rem;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+    width:100%;
+    max-width:830px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);
+    padding:38px;
+    border-radius:22px;
+    border:1px solid var(--ungu-border);
+    box-shadow:0 0 45px rgba(160,80,220,0.25);
+    position:relative;
+}
+
+/* ================= NOTIFICATION (CENTER-BOTTOM) ================= */
+.notif{
+    position:absolute;
+    left:50%;
+    bottom:-25px;
+    transform:translateX(-50%) translateY(15px);
+    padding:14px 20px;
+    background:rgba(231,197,255,0.15);
+    border:1px solid rgba(231,197,255,0.45);
+    backdrop-filter:blur(12px);
+    border-radius:12px;
+    color:var(--ungu-terang);
+    font-size:0.9rem;
+    opacity:0;
+    pointer-events:none;
+    transition:0.35s ease;
+    box-shadow:0 0 18px rgba(200,150,255,0.28);
+}
+
+.notif.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ================= TEXT ================= */
+.title{
+    font-size:2.35rem;
+    text-align:center;
+    background:linear-gradient(90deg, var(--ungu-terang), var(--ungu-terang-2));
+    -webkit-background-clip:text;
+    color:transparent;
+    letter-spacing:3px;
+}
+
+.subtitle{
+    text-align:center;
+    margin-top:12px;
+    margin-bottom:28px;
+    font-size:0.95rem;
+}
+
+/* ================= INPUT ================= */
+label{
+    display:block;
+    margin-bottom:10px;
+    font-size:0.9rem;
+}
+
+input[type="text"]{
+    width:100%;
+    padding:14px;
+    background:rgba(0,0,0,0.35);
+    border:1px solid var(--ungu-border);
+    border-radius:12px;
+    color:var(--ungu-terang);
+    font-size:0.95rem;
+    transition:0.3s ease;
+}
+
+input[type="text"]:focus{
+    border-color:var(--ungu-terang);
+    box-shadow:0 0 15px rgba(213,160,255,0.65);
+}
+
+/* ================= BUTTON ================= */
+.btn{
+    margin:25px auto 0;
+    display:block;
+    padding:15px 28px;
+    background:linear-gradient(90deg, var(--ungu-terang), var(--ungu-terang-2));
+    border:none;
+    border-radius:12px;
+    color:#2a0935;
+    font-weight:700;
+    font-size:1.1rem;
+    cursor:pointer;
+    transition:0.3s ease;
+    box-shadow:0 0 25px rgba(231,197,255,0.55);
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 38px rgba(231,197,255,0.75);
+}
+
+/* ================= LOADING ================= */
+.loading{
+    display:none;
+    text-align:center;
+    margin-top:20px;
+}
+
+.spinner{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:4px solid rgba(255,255,255,0.15);
+    border-top:4px solid var(--ungu-terang);
+    animation:spin 1s linear infinite;
+    margin:0 auto 10px;
+}
+
+@keyframes spin{
+    to{ transform:rotate(360deg); }
+}
+
+/* ================= RESULT ================= */
+.result{
+    display:none;
+    margin-top:30px;
+    text-align:center;
+}
+
+.result img{
+    max-width:100%;
+    border-radius:18px;
+}
+
+.download-btn{
+    display:inline-block;
+    margin-top:14px;
+    padding:12px 24px;
+    background:linear-gradient(90deg, var(--ungu-terang), var(--ungu-terang-2));
+    color:#2a0935;
+    font-weight:700;
+    border-radius:12px;
+    text-decoration:none;
+    transition:0.3s ease;
+}
+
+.download-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 20px rgba(231,197,255,0.8);
+}
+</style>
+</head>
+
+<body>
+
+<!-- GARIS 3 -->
+<div class="menu-btn" id="menu-btn">
+    <span></span>
+    <span></span>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+    <a href="https://whatsapp.com/channel/0029Vb6zQE37tkjBr78ihs07" target="_blank">Join CH Owner</a>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <h1 class="title">Flux Generator Kyys Apeka</h1>
+    <p class="subtitle">AI yang di buat kyys</p>
+
+    <!-- NOTIF POSISI TEPAT DI BAWAH BORDER -->
+    <div class="notif" id="notif"></div>
+
+    <label>Masukkan prompt:</label>
+    <input type="text" id="prompt" placeholder="Tulis deskripsi gambar…">
+
+    <button class="btn" id="generate-btn">PROSES FITUR ✦</button>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Menghasilkan gambar...</p>
+    </div>
+
+    <div class="result" id="result">
+        <h2>Hasil</h2>
+        
+        <div id="image-container"></div>
+        <a id="download-btn" class="download-btn" download="flux-image.jpg">Download</a>
+    </div>
+</div>
+
+<script>
+/* MENU */
+const menuBtn = document.getElementById("menu-btn");
+const popup = document.getElementById("popup");
+
+menuBtn.onclick = () => {
+    menuBtn.classList.toggle("active");
+    popup.classList.toggle("show");
+};
+
+/* NOTIF */
+function showNotif(msg){
+    const n = document.getElementById("notif");
+    n.innerText = msg;
+
+    n.classList.remove("show");
+    void n.offsetWidth;
+
+    n.classList.add("show");
+
+    setTimeout(()=>{
+        n.classList.remove("show");
+    }, 2200);
+}
+
+/* GENERATE */
+document.addEventListener("DOMContentLoaded", function(){
+
+    const generateBtn = document.getElementById("generate-btn");
+    const promptInput = document.getElementById("prompt");
+    const loading = document.getElementById("loading");
+    const result = document.getElementById("result");
+    const imageContainer = document.getElementById("image-container");
+    const downloadBtn = document.getElementById("download-btn");
+
+    generateBtn.onclick = () => {
+
+        const prompt = promptInput.value.trim();
+        if(prompt === ""){
+            showNotif("Isi prompt dulu bre!");
+            return;
+        }
+
+        loading.style.display="block";
+        result.style.display="none";
+
+        const url = `https://api.siputzx.my.id/api/ai/flux?prompt=${encodeURIComponent(prompt)}`;
+
+        fetch(url)
+        .then(res => res.blob())
+        .then(blob=>{
+            const imgURL = URL.createObjectURL(blob);
+
+            loading.style.display="none";
+            result.style.display="block";
+
+            const img = document.createElement("img");
+            img.src = imgURL;
+
+            imageContainer.innerHTML = "";
+            imageContainer.appendChild(img);
+
+            downloadBtn.href = imgURL;
+        })
+        .catch(()=>{
+            loading.style.display="none";
+            showNotif("Gagal generate gambar!");
+        });
+    };
+});
+</script>
+
+</body>
+</html>
